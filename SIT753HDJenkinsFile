@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clone the repository from GitHub
-                git 'https://github.com/albertjulianto/BankAccountpy.git'
+                git 'https://github.com/albertjulianto/SIT753HD.git'
             }
         }
 

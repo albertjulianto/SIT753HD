@@ -12,7 +12,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Check if the Python script can run without syntax errors
-                sh 'python -m py_compile BankAccount.py'
+                sh 'python3 SIT753HD.py'
             }
         }
 

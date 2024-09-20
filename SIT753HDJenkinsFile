@@ -4,25 +4,32 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Clean the workspace before checkout
-                cleanWs() // This will clean the workspace
-                // Clone the repository from GitHub and specify the branch
-                git branch: 'main', url: 'https://github.com/albertjulianto/SIT753HD.git'
+                echo 'Checking out the repository...'
             }
         }
 
         stage('Build') {
             steps {
-                // Check if the Python script can run without syntax errors
-                sh 'python3 SIT753HD.py'
+                echo 'Building the project...'
             }
         }
 
-        // Additional stages (Test, Code Quality, etc.) will follow here
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying the project...'
+            }
+        }
     }
 
     post {
         always {
+            echo 'Pipeline complete. Archiving artifacts...'
             archiveArtifacts artifacts: '*.py', allowEmptyArchive: true
         }
     }

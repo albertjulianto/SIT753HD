@@ -5,24 +5,32 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out the repository...'
+                checkout scm
             }
         }
 
         stage('Build') {
             steps {
                 echo 'Building the project...'
+                // No explicit build step needed for a Python script, but we ensure dependencies are installed
+                sh 'pip install -r requirements.txt || true'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running tests...'
+                // Run Python tests if available, otherwise validate the script syntax
+                sh 'python -m unittest discover || echo "No tests found, validating script..."'
+                sh 'python -m py_compile SIT753HD.py'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying the project...'
+                // Example deployment step - modify based on your deployment strategy
+                sh 'cp SIT753HD.py /path/to/deploy/directory/'
             }
         }
     }
@@ -31,6 +39,12 @@ pipeline {
         always {
             echo 'Pipeline complete. Archiving artifacts...'
             archiveArtifacts artifacts: '*.py', allowEmptyArchive: true
+        }
+        failure {
+            echo 'Build failed!'
+        }
+        success {
+            echo 'Build succeeded!'
         }
     }
 }

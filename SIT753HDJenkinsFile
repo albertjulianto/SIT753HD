@@ -12,24 +12,29 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                // No explicit build step needed for a Python script, but we ensure dependencies are installed
-                sh 'pip install -r requirements.txt || true'
+                // Install dependencies if any
+                sh '''
+                if [ -f "requirements.txt" ]; then
+                    pip install -r requirements.txt
+                else
+                    echo "No dependencies to install."
+                fi
+                '''
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                // Run Python tests if available, otherwise validate the script syntax
-                sh 'python -m unittest discover || echo "No tests found, validating script..."'
-                sh 'python -m py_compile SIT753HD.py'
+                // Check if Python script compiles
+                sh 'python3 -m py_compile SIT753HD.py'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying the project...'
-                // Example deployment step - modify based on your deployment strategy
+                // Example deployment (copy to target location)
                 sh 'cp SIT753HD.py /path/to/deploy/directory/'
             }
         }
